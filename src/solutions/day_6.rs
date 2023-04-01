@@ -1,22 +1,23 @@
 
 use std::fs::File;
-use std::io::{ self, BufRead, BufReader };
+use std::io::{ self, BufRead };
 
 
 
-pub fn solve() {
+pub fn solve(problem: u8) {
 
-    let filename = "inputs/day_6.txt";
-    const window_size:usize = 14; // 4 for problem 1, 14 for problem 2.
-
-    let file = File::open(filename).unwrap(); 
-
+    let input_path = "inputs/day_6.txt";
+    let mut window_size:usize = 4;
+    
+    if problem == 2{
+        window_size = 14; // 4 for problem 1, 14 for problem 2.
+    }
     let mut line = String::new();
-    let num_bytes = io::BufReader::new(file).read_line(&mut line).unwrap(); 
+    let num_bytes = io::BufReader::new(File::open(input_path).unwrap()).read_line(&mut line).unwrap(); 
 
     let bytes = line.as_bytes();
 
-    let mut window:[u8; window_size] = [0; window_size];
+    let mut window:[u8; 14] = [0; 14];
     let mut hash_tab:[u8; 26] = [0; 26];
     
     for i in 0..window_size{
@@ -42,8 +43,7 @@ pub fn solve() {
             }
         }
         if max == 1{
-            print!("{:?}\n, {:?}\n", window, hash_tab);
-            print!("Four unique elements in buffer, at iteration: {}\n", i+1);
+            print!("The answer to day 6 problem {} is: {}\n", problem, i+1);
             break;
         }
     }

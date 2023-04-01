@@ -1,5 +1,4 @@
 use std::fs::File;
-use std::path::Path;
 use std::io::{prelude::*, BufReader};
 
 fn is_fully_contained(l1:i32, u1:i32, l2:i32, u2:i32) -> i32{
@@ -27,7 +26,6 @@ fn byte_array_to_num(byte_array: &[u8]) -> i32 {
     let mut index_pow = 1;
     let mut num:i32 = 0;
 
-    
     for i in 0..byte_array.len() {
         let num_btye: i32 = (byte_array[byte_array.len()-1-i] - 48) as i32;
         num += num_btye*index_pow;
@@ -37,17 +35,13 @@ fn byte_array_to_num(byte_array: &[u8]) -> i32 {
 }
 
 
-fn main() {
-    let input_path = Path::new("input.txt");
-    let file = match File::open(&input_path){
-        Err(why) => panic!{"Couldnt find file: {}", why},
-        Ok(file) => file,
-    };
-    let reader = BufReader::new(file);
+pub fn solve(problem: u8) {
+    let input_path = "inputs/day_4.txt";
+    let lines = BufReader::new(File::open(input_path).unwrap()).lines();
 
     let mut sum = 0;
 
-    for line in reader.lines() {
+    for line in lines {
         if let Ok(line_content) = line {
             let line = line_content.as_bytes();
 
@@ -72,11 +66,13 @@ fn main() {
             let u1 = byte_array_to_num(&line[num_1_index+1..elf_index]);
             let l2 = byte_array_to_num(&line[elf_index+1..num_2_index]);
             let u2 = byte_array_to_num(&line[num_2_index+1..]);
-
-            num_1_index = 0;
-
-            sum += overlap(l1, u1, l2, u2);
+            
+            if problem == 1 {
+                sum += is_fully_contained(l1, u1, l2, u2);
+            } else {
+                sum += overlap(l1, u1, l2, u2);
+            }
         }
     }
-    print!("{}\n",sum)
+    print!("The answer to day 4 problem {} is: {}\n", problem, sum);
 }

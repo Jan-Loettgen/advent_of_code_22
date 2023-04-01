@@ -1,21 +1,14 @@
 use std::fs::File;
-use std::path::Path;
 use std::io::{prelude::*, BufReader};
 
-pub fn solve() {
+pub fn solve(problem: u8) {
     const NUM_STACKS: usize = 9;
 
-    //let mut stack_heights: [u8; NUM_STACKS] = [0; NUM_STACKS];
     let mut stacks: [Vec<u8>; NUM_STACKS] = Default::default();
 
-    let mode = 2; // 1 means problem 1, means problem 2.
+    let input_path = "inputs/day_5.txt";
 
-    let input_path = Path::new("inputs/day_5.txt");
-    let file = match File::open(&input_path){
-        Err(why) => panic!{"Couldnt find file: {}", why},
-        Ok(file) => file,
-    };
-    let reader = BufReader::new(file);
+    let reader = BufReader::new(File::open(input_path).unwrap());
     let lines = reader.lines();
 
     let mut problem_start = false;
@@ -46,8 +39,8 @@ pub fn solve() {
                 let from:usize = (instructions[3].parse::<i32>().unwrap() as usize).try_into().unwrap();
                 let to:usize = (instructions[5].parse::<i32>().unwrap() as usize).try_into().unwrap();
 
-                if mode == 1 {
-                    for i in 0..num{
+                if problem == 1 {
+                    for _ in 0..num{
                         let element =stacks[from -1].pop();
                         match element {
                             Some(element) =>  stacks[to -1].push(element),
@@ -56,8 +49,7 @@ pub fn solve() {
                     }
                 } else {
                     let len_before = stacks[from -1].len();
-                    for i in 0..num{
-                        //let index = (len_before - num);
+                    for _ in 0..num{
                         let index_usize:usize = (len_before - num) as usize;
                         let element = stacks[from -1].remove(index_usize);
                         stacks[to -1].push(element);
@@ -71,8 +63,5 @@ pub fn solve() {
         let element:char = stacks[i].pop().unwrap() as char;
         answer.push(element)
     }
-    print!("The answer is : {}\n", answer);
+    print!("The answer to day 5 problem {} is: {}\n", problem, answer);
 }
-
-
-// use vector as stack!!!

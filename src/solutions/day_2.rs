@@ -1,20 +1,15 @@
 use std::fs::File;
-use std::path::Path;
 use std::io::{prelude::*, BufReader};
 
-fn main() {
-    let input_path = Path::new("input.txt");
+pub fn solve(problem: u8) {
+    let input_path = "inputs/day_2.txt";
     
-    let file = match File::open(&input_path){
-        Err(why) => panic!{"Couldnt find file: {}", why},
-        Ok(file) => file,
-    };
-    let reader = BufReader::new(file);
+    let lines = BufReader::new(File::open(input_path).unwrap()).lines();
 
     let mut part_1_score = 0;
     let mut part_2_score = 0;
 
-    for line in reader.lines() {
+    for line in lines {
         if let Ok(line_content) = line {
      
             let them = line_content.as_bytes()[0] as char;
@@ -56,6 +51,9 @@ fn main() {
             }
         }
     }
-    print!{"achieved score using first method: {}\n", part_1_score}
-    print!{"achieved score using second method: {}\n", part_2_score}
+    if problem == 1{
+        print!("The answer to day 2 problem {} is: {}\n", problem, part_1_score);
+    } else {
+        print!("The answer to day 2 problem {} is: {}\n", problem, part_2_score);
+    }
 }

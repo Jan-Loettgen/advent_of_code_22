@@ -3,46 +3,62 @@
 use std::fs::File;
 use std::io::{prelude::*, BufReader};
 
-struct Dir<'a>{
-    dirs: Vec<Dir<'a>>,
-    files: Vec<u32>,
-    dir_index: usize,
-    dir_size: u32,
-    parent: Option<&'a Dir<'a>>,
-}
+fn get_dir_size(file_vector: &mut Vec<u32>, reader:&mut BufReader<File>) -> u32{
+    
+    let mut line = String::new();
+    let mut sum_size: u32 = 0;
+    let _status = (*reader).read_line(&mut line).unwrap();
 
-impl Dir<'_> {
-    fn new () -> Dir<'static>{
-        Dir{ dirs : Vec::new(), files : Vec::new(), dir_index: 0, dir_size: 0, parent: None}
+    loop{
+
+        if line.len() == 0 {
+            return sum_size
+        } else if &line[0..1] == "$" {
+            if line.len() == 9  && &line[..9] == "$ cd ..\r\n"{
+                return sum_size 
+            } else if line.len() >= 7 && &line[..4] == "$ cd"{
+                let dir_size = get_dir_size(file_vector, reader);
+                file_vector.push(dir_size);
+
+                sum_size = sum_size + dir_size;
+            }
+        } else {
+            if line.len() >= 7 && &line[..4] != "dir "{
+                let file_size = line.split(' ').collect::<Vec<_>>()[0].parse::<u32>().unwrap();
+                sum_size = sum_size +file_size
+            }
+        }
+        line.clear();
+        let _status = (*reader).read_line(&mut line).unwrap();
     }
 }
 
-pub fn solve(_problem: u8) {
+pub fn solve(problem: u8) {
 
-    let input_path = "sample_inputs/day_7_sample.txt";
-    let lines = BufReader::new(File::open(input_path).unwrap()).lines();
+    let input_path = "inputs/day_7.txt";
+    let mut reader = BufReader::new(File::open(input_path).unwrap());
+    let mut file_vector = Vec::new();
 
-    let mut dir_tree = Dir::new();
-    let mut active_dir = &mut dir_tree;
 
-    for line in lines {
-        let line_contents = line.unwrap();
-        if line_contents == "$ cd /" {
-            continue;
+    get_dir_size(&mut file_vector, &mut reader);
+
+    let mut answer = 0;
+    if problem == 1  {
+        for element in file_vector {
+            if element <= 100000 {
+                answer = answer + element;
+            }
         }
+    } else {
+        let required = 30000000 - (70000000 - file_vector[file_vector.len()-1]);
 
-        if line_contents.as_bytes()[0] != b'$'{
-            if line_contents.as_bytes()[0] == b'd' {
-                active_dir.dirs.push(Dir::new());
-            } else {
-                let num = line_contents.split(' ').collect::<Vec<_>>()[0].parse::<u32>().unwrap();
-                active_dir.dir_size += num;
-                active_dir.files.push(num);
-            } 
-        } else {
-            if &line_contents[0..4] == "$ cd" {
-                active_dir = &mut active_dir.dirs[active_dir.dir_index];
+        let mut max = file_vector[file_vector.len()-1];
+        for element in file_vector {
+            if element >= required  && element < max{
+                answer = element;
+                max = element
             }
         }
     }
+    print!("The answer to day 6 problem {} is: {}\n", problem, answer);
 }

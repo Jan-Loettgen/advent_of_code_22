@@ -3,6 +3,8 @@
 use std::fs::File;
 use std::io::{prelude::*, BufReader};
 
+// SOLUTION APPROACH IS RECURSION
+
 fn get_dir_size(file_vector: &mut Vec<u32>, reader:&mut BufReader<File>) -> u32{
     
     let mut line = String::new();

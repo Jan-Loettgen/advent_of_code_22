@@ -24,7 +24,7 @@ pub fn solve(problem: u8) {
         }
     }
 
-
+    let mut answer = 0;
     if problem == 1 {
         let mut mask = [[4; 99]; 99];
         for i in 0..gridsize {
@@ -70,19 +70,17 @@ pub fn solve(problem: u8) {
                 }
             }
         }
-
-        let mut count = 0;
         for i in 0..gridsize {
             for j in 0..gridsize {
                 if mask[i][j] != 0 {
-                    count = count + 1;
+                    answer = answer + 1;
                 }
             }
         }
-        print!("{}\n", count);
+        print!("The answer to day 6 problem {} is: {}\n", 1, answer);
     } else {
 
-        let mut max_score = 0;
+        let mut answer = 0;
 
         for col in 0..(gridsize) {
             for row in 0..(gridsize) {
@@ -141,12 +139,10 @@ pub fn solve(problem: u8) {
 
                 }
                 let score = dists[0]*dists[1]*dists[2]*dists[3];
-
-                if score > max_score {
-                    max_score = score;
+                if score > answer {
+                    answer = score;
                 }
             }
-        } print!("{}\n", max_score)
-
+        } print!("The answer to day 6 problem {} is: {}\n", 2, answer);
     }
 }

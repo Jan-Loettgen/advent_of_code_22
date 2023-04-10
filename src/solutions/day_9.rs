@@ -121,5 +121,5 @@ pub fn solve(problem: u8) {
             }
         }
     }
-    print!("The answer to day 6 problem {} is: {}\n", problem, answer);
+    print!("The answer to day 9 problem {} is: {}\n", problem, answer);
 }

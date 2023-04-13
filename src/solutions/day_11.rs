@@ -3,6 +3,31 @@ use std::io::{prelude::*, BufReader};
 use std::collections::VecDeque;
 
 #[derive(Debug)]
+struct Item {
+    instructions    : Vec<(u8, u128)>
+}
+
+impl Item{
+    fn find_remainder(&self, divisor:u128) -> u128 {
+        let mut remainder:u128 = start%divisor;
+
+        for i in self.instructions.len(){
+            let instruction = self.instructions[0];
+            let item = self.instructions[i][1];
+
+            if instruction == 1 { // addition
+                remainder = (remainder + (item % divisor)) % divisor;
+            } else if instruction == 2 { //multiplication
+                remainder = (remainder * (item % divisor)) % divisor;
+            } else instruction == 3 { // square
+                remainder = (remainder * remainder) % divisor;
+            }
+        }   
+        remainder
+    }   
+}
+
+#[derive(Debug)]
 struct Monke{
     items           : VecDeque<u128>,
     operation       : u8, // 1: addition, 2: multiplication, 3: square
@@ -41,7 +66,7 @@ fn parse_input(input_path: &str, monkes: &mut Vec<Monke>) {
         if status == 0 {
             line.clear();
             break;
-        } else if status == 2 {
+        } else if status == 1 {
             line.clear();
             continue;
         }
@@ -49,13 +74,17 @@ fn parse_input(input_path: &str, monkes: &mut Vec<Monke>) {
         if &line[0..6] == "Monkey"{
             line.clear();
             let status = reader.read_line(&mut line).unwrap();
-            line.pop(); // remove \r
+            //line.pop(); // remove \r
             line.pop();  // remove \n
-            let item_iter = line[18..status-2].split(", ");
+            let item_iter = line[18..status-1].split(", ");
             let mut starting_items: VecDeque<u128> = VecDeque::new();
 
             for item in item_iter{
-                starting_items.push_back(item.parse::<u128>().unwrap());
+                match item.parse::<u128>() {
+                    Ok(num) => starting_items.push_back(num),
+                    _ => (),
+                };
+                //starting_items.push_back(item.parse::<u128>().unwrap());
             }
             line.clear();
             let status = reader.read_line(&mut line).unwrap();
@@ -70,7 +99,7 @@ fn parse_input(input_path: &str, monkes: &mut Vec<Monke>) {
             let mut operation_comp_str = line.split(' ').collect::<Vec<_>>().pop().unwrap();
             //let operation_comp = operation_comp_str[0..operation_comp_str.len()-2].parse::<u32>();
 
-            let operation_comp = match operation_comp_str[0..operation_comp_str.len()-2].parse::<u128>() {
+            let operation_comp = match operation_comp_str[0..operation_comp_str.len()-1].parse::<u128>() {
                 Ok(op_comp) => op_comp,
                 Err(error) => {
                     operation = 3;
@@ -79,17 +108,17 @@ fn parse_input(input_path: &str, monkes: &mut Vec<Monke>) {
             line.clear();
             let status = reader.read_line(&mut line).unwrap();
             let mut divisor_str = line.split(' ').collect::<Vec<_>>().pop().unwrap();
-            let divisor = divisor_str[0..divisor_str.len()-2].parse::<u128>().unwrap();
+            let divisor = divisor_str[0..divisor_str.len()-1].parse::<u128>().unwrap();
 
             line.clear();
             let status = reader.read_line(&mut line).unwrap();
             let mut true_monke_str = line.split(' ').collect::<Vec<_>>().pop().unwrap();
-            let true_monke = true_monke_str[0..true_monke_str.len()-2].parse::<usize>().unwrap();
+            let true_monke = true_monke_str[0..true_monke_str.len()-1].parse::<usize>().unwrap();
 
             line.clear();
             let status = reader.read_line(&mut line).unwrap();
             let mut false_monke_str = line.split(' ').collect::<Vec<_>>().pop().unwrap();
-            let false_monke = false_monke_str[0..false_monke_str.len()-2].parse::<usize>().unwrap();
+            let false_monke = false_monke_str[0..false_monke_str.len()-1].parse::<usize>().unwrap();
             
             line.clear();
 
@@ -106,14 +135,14 @@ fn parse_input(input_path: &str, monkes: &mut Vec<Monke>) {
 }
 
 pub fn solve(problem: u8) {
-    let input_path = "inputs/day_11.txt";
+    let input_path = "sample_inputs/day_11_sample2.txt";
     let mut monkes: Vec<Monke> = Vec::new();
 
     let mut test_queue: VecDeque<usize> = VecDeque::new();
 
     parse_input(input_path, &mut monkes);
 
-    for i in 0..20 {
+    for i in 0..30 {
         for j in 0..monkes.len() {
             for k in 0..monkes[j].items.len() {
 
@@ -130,8 +159,11 @@ pub fn solve(problem: u8) {
                     } else {
                         worry = item * item;
                     }
-                    worry = worry /3;
-                    
+
+                    if problem == 1 {
+                        worry = worry /3;
+                    }
+
                     if worry % monkes[j].divisor == 0 {
                         target_monke = monkes[j].true_monke;
                     } else {
@@ -141,13 +173,17 @@ pub fn solve(problem: u8) {
                 monkes[target_monke].items.push_back(worry);
             }
         }
+        for (i, monke) in (&monkes).iter().enumerate() {
+            print!("{}, {:?}\n", i, monke);
+        }
+        print!("-------------------------------\n");
     }
 
 
     for monke in &monkes {
         print!("{:?}\n", monke);
     }
-    print!("{:?}", monkes[1].items_inspected * monkes[7].items_inspected);
+    //print!("{:?}", monkes[1].items_inspected * monkes[7].items_inspected);
 
 
 }

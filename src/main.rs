@@ -1,7 +1,7 @@
 pub mod solutions;
 
 fn main() {
-    println!("Hello, world!");
+    // println!("Hello, world!");
     // solutions::day_1::solve(1);
     // solutions::day_1::solve(2);
     // solutions::day_2::solve(1);
@@ -24,5 +24,5 @@ fn main() {
     // solutions::day_10::solve(2);
     // solutions::day_11::solve(1);
     // solutions::day_11::solve(2);
-    solutions::day_12::solve(1);
+    solutions::day_12::solve(1, true);
 }

@@ -21,7 +21,7 @@ pub fn solve(problem: u8) {
 
             let num = instruction[1].parse::<u8>().unwrap();
 
-            for i in 0..num {
+            for _i in 0..num {
                 if instruction[0] == "R" {
                     coords_head.0 = coords_head.0 + 1;
                 } else if instruction[0] == "U"{
@@ -69,7 +69,7 @@ pub fn solve(problem: u8) {
 
             let num = instruction[1].parse::<u8>().unwrap();
 
-            for i in 0..num {
+            for _i in 0..num {
                 if instruction[0] == "R" {
                     coor_vec[0].0 = coor_vec[0].0 + 1;
                 } else if instruction[0] == "U"{

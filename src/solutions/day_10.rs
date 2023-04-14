@@ -16,8 +16,8 @@ pub fn solve(problem: u8) {
     let mut answer = 0;
 
     let mut grid: [[char; 40]; 6] = [[' '; 40]; 6];
-    let mut row_index:i32 = 0;
-    let mut col_index:i32 = 0;
+    let mut row_index:i32;
+    let mut col_index:i32;
 
     loop {
         if problem == 1 {
@@ -57,7 +57,7 @@ pub fn solve(problem: u8) {
         // only nice formatting for output
         print!("The answer to day 10 problem {} is:\n", problem);
         print!("+");
-        for i in 0..42{
+        for _i in 0..42{
             print!("-");
         }
         print!("+\n");
@@ -69,7 +69,7 @@ pub fn solve(problem: u8) {
             print!(" |\n");
         }
         print!("+");
-        for i in 0..42{
+        for _i in 0..42{
             print!("-");
         }
         print!("+\n");

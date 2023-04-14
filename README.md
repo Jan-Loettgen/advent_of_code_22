@@ -8,7 +8,7 @@ This repository contains my solutions to the Advent of Code 2022, implemented in
 4. Brute force
 5. Brute force
 6. Brute force
-7. Recursive Brute force
+7. Recursive brute force
 8. Brute force
 9. Brute force
 10. Brute force

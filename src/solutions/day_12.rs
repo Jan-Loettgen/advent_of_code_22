@@ -39,7 +39,7 @@ impl Node {
     }
 }
 
-fn build_map(input_path: &str) -> [[Node; COLS]; ROWS]{
+fn build_map(input_path: &str, problem: u8) -> [[Node; COLS]; ROWS]{
 
     let reader = BufReader::new(File::open(input_path).unwrap());
     let mut map: [[Node; COLS]; ROWS] = arr![arr![Node::new(); 143]; 41];
@@ -52,15 +52,24 @@ fn build_map(input_path: &str) -> [[Node; COLS]; ROWS]{
 
             if height == b'E' {
                 height = b'z';
+                if problem != 1 {
+                    map[i][j].g_score = 0; // this wil be the starting point so initalise cost to come to 0.
+                }
             } else if height == b'S'{
                 height = b'a';
-                map[i][j].g_score = 0; // this wil be the starting point so initalise cost to come to 0.
+                if problem == 1 {
+                    map[i][j].g_score = 0; // this wil be the starting point so initalise cost to come to 0.
+                } 
             }
 
             height = height - 97;
 
             // calculate h_score
-            map[i][j].h_score = (((TARGET_X as i32) - (j as i32)).abs() + (TARGET_Y as i32) -(i as i32).abs()).abs() as u32;
+            if problem == 1 {
+                map[i][j].h_score = (((TARGET_X as i32) - (j as i32)).abs() + (TARGET_Y as i32) -(i as i32).abs()).abs() as u32;
+            } else {
+                map[i][j].h_score = 0;
+            }
 
             map[i][j].x = j;
             map[i][j].y = i;
@@ -92,7 +101,7 @@ fn build_map(input_path: &str) -> [[Node; COLS]; ROWS]{
     map
 }
 
-fn draw_map(map: &[[Node; COLS]; ROWS]) {
+fn draw_map(map: &[[Node; COLS]; ROWS], problem: u8) {
     //print!("\x1B[2J\x1B[1;1H");
     for _j in 0..COLS+4 {
         print!("-");
@@ -103,9 +112,17 @@ fn draw_map(map: &[[Node; COLS]; ROWS]) {
         for j in 0..COLS {
 
             if j == TARGET_X && i == TARGET_Y{
-                print!("\x1b[41m{}\x1b[0m", map[i][j].height/3);
+                if problem == 1 {
+                    print!("\x1b[41m{}\x1b[0m", map[i][j].height/3);
+                } else {
+                    print!("\x1b[42m{}\x1b[0m", map[i][j].height/3);
+                }
             } else if j == START_X && i == START_Y{
-                print!("\x1b[42m{}\x1b[0m", map[i][j].height/3);
+                if problem == 1 {
+                    print!("\x1b[42m{}\x1b[0m", map[i][j].height/3);
+                } else {
+                    print!("\x1b[41m{}\x1b[0m", map[i][j].height/3);
+                }
             } else if map[i][j].visited {
                 print!("\x1b[93m{}\x1b[0m", map[i][j].height/3);
             } else {
@@ -121,22 +138,27 @@ fn draw_map(map: &[[Node; COLS]; ROWS]) {
     print!("\x1b[44A\r\n");
 }
 
-pub fn solve(_problem: u8, draw: bool) {
+pub fn solve(problem: u8, draw: bool) {
     let input_path = "inputs/day_12.txt";
 
     // components for A*
-    let mut map = build_map(input_path);
+    let mut map = build_map(input_path, problem);
     let mut pq:PriorityQueue<(usize, usize), u32> = PriorityQueue::new();
 
     if draw{
-        draw_map(&map);
+        draw_map(&map, problem);
     }
-    pq.push((START_X, START_Y), 4294967295);
+        // A star
 
+    if problem == 1{
+        pq.push((START_X, START_Y), 4294967295);
+    } else {
+        pq.push((TARGET_X, TARGET_Y), 4294967295);
+    }
     while pq.len() > 0 {
         let (x, y) = pq.pop().unwrap().0;
 
-        if x == TARGET_X && y == TARGET_Y{
+        if problem == 1 && x == TARGET_X && y == TARGET_Y{
             break;
         }
 
@@ -144,9 +166,9 @@ pub fn solve(_problem: u8, draw: bool) {
         let g_score;
         {// hacking the rust scopes becuase to I am to dumb to get it to work otherwise
         let curr_node   = &mut map[y][x];
-        curr_node.visited = true;
-        g_score = curr_node.g_score;
-        connections = curr_node.connections;
+            curr_node.visited = true;
+            g_score = curr_node.g_score;
+            connections = curr_node.connections;
         }
 
         if connections[0] == 1 {
@@ -185,14 +207,30 @@ pub fn solve(_problem: u8, draw: bool) {
                 pq.push((node.x, node.y), 4294967295 - node.g_score - node.h_score);
             }
         }
-        if draw{
-            draw_map(&map);
+        if draw {
+            draw_map(&map, problem);
         }
     }
-    if draw{
-        draw_map(&map);
+    if draw {
+        draw_map(&map, problem);
         print!("\x1b[43B\r\n");
-
     }
-    print!("The answer to day 6 problem {} is: {}\n", _problem, map[TARGET_Y][TARGET_X].g_score);
+
+    if problem == 1 {
+        print!("The answer to day 6 problem {} is: {}\n", problem, map[TARGET_Y][TARGET_X].g_score);
+    } else {
+        let mut answer = 4294967295;
+
+        for i in 0..ROWS {
+            for j in 0..COLS {
+                if map[i][j].height == 0 {
+                    if map[i][j].g_score < answer {
+                        answer = map[i][j].g_score;
+                        print!("{}, {}, {}\n", i, j, answer);
+                    }
+                }
+            }
+        }
+        print!("The answer to day 6 problem {} is: {}\n", problem, answer);
+    }
 }

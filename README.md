@@ -14,3 +14,6 @@ This repository contains my solutions to the Advent of Code 2022, implemented in
 10. Brute force
 11. Modular arithmetic
 12. Part 1: A*. Part 2: Dijkstra. Both animated in terminal
+
+### To use:
+Go to src/main.rs and comment or uncomment the solve functions corresponding to each day. The solve functions takes as input an integer 1 for problem 1, 2 for problem 2. The day 12 problems are animated in the terminal, providing an argument of false to the day 12 solve() call will disable the animations. Build and run the code via "cargo run", and the solutions will be printed to the terminal.

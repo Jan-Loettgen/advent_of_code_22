@@ -12,11 +12,10 @@ fn get_dir_size(file_vector: &mut Vec<u32>, reader:&mut BufReader<File>) -> u32{
     let _status = (*reader).read_line(&mut line).unwrap();
 
     loop{
-
         if line.len() == 0 {
             return sum_size
         } else if &line[0..1] == "$" {
-            if line.len() == 9  && &line[..9] == "$ cd ..\r\n"{
+            if line.len() == 8  && &line[..8] == "$ cd ..\n"{
                 return sum_size 
             } else if line.len() >= 7 && &line[..4] == "$ cd"{
                 let dir_size = get_dir_size(file_vector, reader);
@@ -62,5 +61,5 @@ pub fn solve(problem: u8) {
             }
         }
     }
-    print!("The answer to day 6 problem {} is: {}\n", problem, answer);
+    print!("The answer to day 7 problem {} is: {}\n", problem, answer);
 }

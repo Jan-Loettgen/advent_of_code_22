@@ -16,4 +16,6 @@ This repository contains my solutions to the Advent of Code 2022, implemented in
 12. Part 1: A*. Part 2: Dijkstra. Both animated in terminal
 
 ### To use:
+Like will only run on an ubuntu based system, as characters in the text files will be different on different operating systems. E.g. windows adds a carriage return before end of line in a text file.
+
 Go to src/main.rs and comment or uncomment the solve functions corresponding to each day. The solve functions takes as input an integer 1 for problem 1, 2 for problem 2. The day 12 problems are animated in the terminal, providing an argument of false to the day 12 solve() call will disable the animations. Build and run the code via "cargo run", and the solutions will be printed to the terminal.

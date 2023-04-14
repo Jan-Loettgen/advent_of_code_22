@@ -77,7 +77,7 @@ pub fn solve(problem: u8) {
                 }
             }
         }
-        print!("The answer to day 6 problem {} is: {}\n", 1, answer);
+        print!("The answer to day 8 problem {} is: {}\n", 1, answer);
     } else {
 
         let mut answer = 0;
@@ -143,6 +143,6 @@ pub fn solve(problem: u8) {
                     answer = score;
                 }
             }
-        } print!("The answer to day 6 problem {} is: {}\n", 2, answer);
+        } print!("The answer to day 8 problem {} is: {}\n", 2, answer);
     }
 }

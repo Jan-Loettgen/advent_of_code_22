@@ -216,5 +216,5 @@ pub fn solve(problem: u8) {
         }
     }
 
-    print!("The answer to day 6 problem {} is: {}\n", problem, max_1*max_2);
+    print!("The answer to day 11 problem {} is: {}\n", problem, max_1*max_2);
 }

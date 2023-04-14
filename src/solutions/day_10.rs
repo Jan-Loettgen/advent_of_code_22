@@ -40,7 +40,6 @@ pub fn solve(problem: u8) {
             }
             if &line[0..4] != "noop" {
                 line.pop(); // remove \n 
-                line.pop(); // remove \r
                 cur_instruction = line.split(' ').collect::<Vec<_>>()[1].parse::<i32>().unwrap();
                 addx_progress = 1;
             }

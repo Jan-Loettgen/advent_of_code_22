@@ -229,7 +229,7 @@ pub fn solve(problem: u8, draw: bool) {
     }
 
     if problem == 1 {
-        print!("The answer to day 6 problem {} is: {}\n", problem, map[TARGET_Y][TARGET_X].g_score);
+        print!("The answer to day 12 problem {} is: {}\n", problem, map[TARGET_Y][TARGET_X].g_score);
     } else {
         let mut answer = 4294967295;
 
@@ -242,6 +242,6 @@ pub fn solve(problem: u8, draw: bool) {
                 }
             }
         }
-        print!("The answer to day 6 problem {} is: {}\n", problem, answer);
+        print!("The answer to day 12 problem {} is: {}\n", problem, answer);
     }
 }

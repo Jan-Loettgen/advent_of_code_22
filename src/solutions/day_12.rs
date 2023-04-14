@@ -80,19 +80,31 @@ fn build_map(input_path: &str, problem: u8) -> [[Node; COLS]; ROWS]{
     for i in 0..ROWS {
         for j in 0..COLS{
             let height = map[i][j].height;
-            if j > 0 && height +1 >= map[i][j-1].height { 
-                map[i][j].connections[2] = 1;
+            if j > 0 {
+                if problem == 1 && height +1 >= map[i][j-1].height { 
+                    map[i][j].connections[2] = 1;
+                } else if problem == 2 && map[i][j-1].height +1 >= height {
+                    map[i][j].connections[2] = 1;
+                }
             }
-            if j < COLS-1 && height +1 >= map[i][j + 1].height { 
-                map[i][j].connections[0] = 1;
+            if j < COLS-1 {
+                if problem == 1 && height +1 >= map[i][j + 1].height { 
+                    map[i][j].connections[0] = 1;
+            } else if problem == 2 && map[i][j + 1].height +1 >= height{
+                    map[i][j].connections[0] = 1;
+                }
             }
 
             if i > 0 {
-                if  height + 1 >= map[i-1][j].height { 
+                if  problem == 1 && height + 1 >= map[i-1][j].height { 
+                    map[i][j].connections[1] = 1;
+                } else if problem == 2 && map[i-1][j].height + 1 >= height{
                     map[i][j].connections[1] = 1;
                 }
-                if map[i-1][j].height + 1 >= height {
+                if problem == 1 && map[i-1][j].height + 1 >= height {
                     // NEED TO DO PREVIOUS ROWS VERTICAL UP CONNECTION ON NEXT ROW
+                    map[i-1][j].connections[3] = 1;
+                } else if problem == 2 && height + 1 >= map[i-1][j].height {
                     map[i-1][j].connections[3] = 1;
                 }
             }
@@ -226,7 +238,6 @@ pub fn solve(problem: u8, draw: bool) {
                 if map[i][j].height == 0 {
                     if map[i][j].g_score < answer {
                         answer = map[i][j].g_score;
-                        print!("{}, {}, {}\n", i, j, answer);
                     }
                 }
             }

@@ -4,15 +4,15 @@ use arr_macro::arr;
 use priority_queue::PriorityQueue;
 
 //dims 43 ROWS 143 COLS
-// A algorithm?
+// Part 1: A* algorithm 
+// Part 1: Djikstras algorithm 
+const ROWS: usize = 41;         // hard coding for simplicity
+const COLS: usize = 143;        // hard coding for simplicity
 
-const ROWS: usize = 41;
-const COLS: usize = 143;
-
-const TARGET_X :usize = 120;
-const TARGET_Y :usize = 20;
-const START_X  :usize = 0;
-const START_Y  :usize = 20;
+const TARGET_X :usize = 120;    // hard coding for simplicity
+const TARGET_Y :usize = 20;     // hard coding for simplicity
+const START_X  :usize = 0;      // hard coding for simplicity
+const START_Y  :usize = 20;     // hard coding for simplicity
 
 #[derive(PartialEq, Eq, Hash)]
 struct Node {
@@ -64,10 +64,10 @@ fn build_map(input_path: &str, problem: u8) -> [[Node; COLS]; ROWS]{
 
             height = height - 97;
 
-            // calculate h_score
+            // calculate h_score for A*
             if problem == 1 {
                 map[i][j].h_score = (((TARGET_X as i32) - (j as i32)).abs() + (TARGET_Y as i32) -(i as i32).abs()).abs() as u32;
-            } else {
+            } else { // not used in djikstra
                 map[i][j].h_score = 0;
             }
 
@@ -114,7 +114,6 @@ fn build_map(input_path: &str, problem: u8) -> [[Node; COLS]; ROWS]{
 }
 
 fn draw_map(map: &[[Node; COLS]; ROWS], problem: u8) {
-    //print!("\x1B[2J\x1B[1;1H");
     for _j in 0..COLS+4 {
         print!("-");
     }
@@ -153,15 +152,13 @@ fn draw_map(map: &[[Node; COLS]; ROWS], problem: u8) {
 pub fn solve(problem: u8, draw: bool) {
     let input_path = "inputs/day_12.txt";
 
-    // components for A*
     let mut map = build_map(input_path, problem);
     let mut pq:PriorityQueue<(usize, usize), u32> = PriorityQueue::new();
 
     if draw{
         draw_map(&map, problem);
     }
-        // A star
-
+    
     if problem == 1{
         pq.push((START_X, START_Y), 4294967295);
     } else {

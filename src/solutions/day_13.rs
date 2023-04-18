@@ -142,7 +142,7 @@ fn compare_entries(list_l: &ListEntry, list_r: &ListEntry) -> u8 {
         if matches!(list_l, ListEntry::List(vec) if vec.len() == 1) {
             toggle = 0
         } else {
-            toggle = 1;// left was a list 
+            toggle = 1; // left was a list 
         }
         variant_l = 0;
     }
@@ -200,7 +200,6 @@ fn compare_entries(list_l: &ListEntry, list_r: &ListEntry) -> u8 {
     }
 }
 
-//the get first logic is wrong. correct thing to do is to covert element to list and then continue comparison which enables list running out of space.
 pub fn solve(problem: u8) {
     let input_path = "inputs/day_13.txt";
     let mut reader = BufReader::new(File::open(input_path).unwrap());

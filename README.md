@@ -15,6 +15,7 @@ This repository contains my solutions to the Advent of Code 2022, implemented in
 11. Modular arithmetic.
 12. Part 1: A*. Part 2: Dijkstra. Both animated in terminal.
 13. Part 1: Recursion, Nested list parser. Part 2: Bubble sort. 
+14. Brute force. Drawable.
 
 ### To use:
 Like will only run on an ubuntu based system, as characters in the text files will be different on different operating systems. E.g. windows adds a carriage return before end of line in a text file.
